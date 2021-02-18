@@ -36,7 +36,7 @@ class FishingCompetition {
         state == State.DISABLED
 
     fun willBeNewFirst(catcher: OfflinePlayer, fish: Fish): Boolean {
-        return ranking.isEmpty() || ranking.first().let { fish.length > it.fish.length && it.fisher != catcher }
+        return ranking.isEmpty() || ranking.first().let { fish.length > it.fish.length }
     }
 
     fun putRecord(record: Record) {

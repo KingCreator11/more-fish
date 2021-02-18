@@ -40,7 +40,7 @@ class FishShopGui(
 
     init {
         val bottomBarIcon = ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE)
-        bottomBarIcon.edit<ItemMeta> { displayName = " " }
+        bottomBarIcon.edit<ItemMeta> { setDisplayName(" ") }
         for (slot in bottomBarSlots) {
             inventory.setItem(slot, bottomBarIcon)
         }
@@ -87,23 +87,23 @@ class FishShopGui(
     }
 
     private fun dropAllFish() {
-        for (itemStack in allFishItemStacks()) {
+        for (itemStack in fishSlots.mapNotNull { slot -> inventory.getItem(slot) }) {
             user.world.dropItem(user.location, itemStack.clone())
         }
     }
 
     private fun allFishItemStacks(): List<ItemStack> {
         return fishSlots
-            .mapNotNull { slot -> inventory.getItem(slot) ?: null }
+            .mapNotNull { slot -> inventory.getItem(slot) }
             .filter { itemStack -> converter.isFish(itemStack) }
     }
 
     private fun updatePriceIcon(price: Double = totalPrice) {
         val emeraldIcon = ItemStack(Material.EMERALD)
         emeraldIcon.edit<ItemMeta> {
-            displayName = Lang.format("shop-emerald-icon-name")
+            setDisplayName(Lang.format("shop-emerald-icon-name")
                 .replace("%price%" to price.toString())
-                .output()
+                .output())
         }
         inventory.setItem(priceIconSlot, emeraldIcon)
     }

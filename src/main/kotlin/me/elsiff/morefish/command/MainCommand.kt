@@ -46,7 +46,6 @@ class MainCommand(
         sender.sendMessage("$prefix/$label begin [runningTime(sec)]")
         sender.sendMessage("$prefix/$label suspend")
         sender.sendMessage("$prefix/$label end")
-        sender.sendMessage("$prefix/$label rewards")
         sender.sendMessage("$prefix/$label clear")
         sender.sendMessage("$prefix/$label reload")
         sender.sendMessage("$prefix/$label top")
@@ -148,7 +147,7 @@ class MainCommand(
                 return
             }
 
-            val target = sender.server.getPlayerExact(args[0]) ?: null
+            val target = sender.server.getPlayerExact(args[0])
             if (target == null) {
                 val msg = Lang.format("player-not-found").replace("%s" to args[0]).output()
                 sender.sendMessage(msg)

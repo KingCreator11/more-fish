@@ -20,10 +20,10 @@ abstract class AbstractBroadcaster : CatchHandler {
 
     override fun handle(catcher: Player, fish: Fish) {
         if (meetBroadcastCondition(catcher, fish)) {
-            val receivers = fish.type.catchAnnouncement.receiversOf(catcher).toMutableList()
+            val receivers = announcement(fish).receiversOf(catcher).toMutableList()
 
             if (Config.standard.boolean("messages.only-announce-fishing-rod")) {
-                receivers.removeIf { it.inventory.itemInMainHand?.type != Material.FISHING_ROD }
+                receivers.removeIf { it.inventory.itemInMainHand.type != Material.FISHING_ROD }
             }
 
             val msg = catchMessageFormat.replace(
