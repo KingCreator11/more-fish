@@ -1,5 +1,8 @@
 package me.elsiff.morefish.fishing
 
+import com.gmail.nossr50.config.experience.ExperienceConfig
+import com.gmail.nossr50.util.player.UserManager
+import me.elsiff.morefish.MoreFish
 import me.elsiff.morefish.configuration.Config
 import me.elsiff.morefish.configuration.Lang
 import me.elsiff.morefish.fishing.catchhandler.CatchHandler
@@ -44,6 +47,18 @@ class FishingListener(
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun onPlayerFish(event: PlayerFishEvent) {
         if (event.state == PlayerFishEvent.State.CAUGHT_FISH && event.caught is Item) {
+            // check is the mcMMO instance hooked (I guess check is mcMMO enabled?)
+            if(MoreFish.instance.mcmmoHooker.hasHooked) {
+                val mcmmoPlayer = UserManager.getPlayer(event.player)
+                mcmmoPlayer?.let {
+                    val vector = event.hook.location.toVector()
+                    if(ExperienceConfig.getInstance().isFishingExploitingPrevented
+                        && mcmmoPlayer.fishingManager.isExploitingFishing(vector)) {
+                        return
+                    }
+                }
+            }
+
             if (Config.standard.boolean("general.no-fishing-unless-contest") && !competition.isEnabled()) {
                 event.isCancelled = true
                 event.player.sendMessage(Lang.text("no-fishing-allowed"))
